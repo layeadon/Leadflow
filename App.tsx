@@ -8,17 +8,11 @@ import LeadInbox from './components/LeadInbox';
 import Simulator from './components/Simulator';
 import DeploymentGuide from './components/DeploymentGuide';
 import Auth from './components/Auth';
-import { Menu, X, Zap, Wifi, WifiOff } from 'lucide-react';
+import { Menu, X, Zap, Globe, Shield } from 'lucide-react';
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<UserProfile | null>(
-    storageService.getUser() || {
-      id: 'test_user_123',
-      email: 'testing@leadflow.io',
-      businessName: 'My Awesome Business',
-      isLoggedIn: true
-    }
-  );
+  // We remove the hardcoded object here so it strictly follows storage/login logic
+  const [user, setUser] = useState<UserProfile | null>(storageService.getUser());
   
   const [activeTab, setActiveTab] = useState('dashboard');
   const [config, setConfig] = useState<BusinessConfig>(storageService.getConfig());
@@ -77,7 +71,6 @@ const App: React.FC = () => {
             <Zap className="text-white w-4 h-4 fill-white" />
           </div>
           <span className="font-bold text-lg tracking-tight text-slate-900">LeadFlow</span>
-          {isLive && <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse ml-1"></span>}
         </div>
         <button 
           onClick={() => setSidebarOpen(!sidebarOpen)}
@@ -87,7 +80,6 @@ const App: React.FC = () => {
         </button>
       </div>
 
-      {/* Backdrop for mobile */}
       {sidebarOpen && (
         <div 
           className="lg:hidden fixed inset-0 bg-slate-900/40 z-[55] backdrop-blur-[2px] transition-all"
@@ -112,18 +104,28 @@ const App: React.FC = () => {
           ${sidebarOpen ? 'lg:ml-64' : 'ml-0'} 
           pt-24 lg:pt-10`}
       >
-        <div className="mb-6 flex justify-between items-center">
+        <div className="mb-10 flex justify-between items-center">
            {!isLive ? (
-              <div className="flex items-center gap-3 px-4 py-2 bg-amber-50 border border-amber-100 rounded-2xl text-amber-800 animate-in fade-in slide-in-from-top-2">
-                 <WifiOff size={16} className="animate-pulse" />
-                 <span className="text-xs font-bold uppercase tracking-widest">Development Mode: Local Storage</span>
+              <div className="flex items-center gap-3 px-5 py-2.5 bg-white border border-slate-200 rounded-2xl shadow-sm animate-in fade-in slide-in-from-top-2">
+                 <Shield size={16} className="text-slate-400" />
+                 <span className="text-[10px] font-black uppercase tracking-widest text-slate-500">Sandbox Mode: Testing Active</span>
               </div>
            ) : (
-              <div className="flex items-center gap-3 px-4 py-2 bg-green-50 border border-green-100 rounded-2xl text-green-700 animate-in fade-in slide-in-from-top-2">
-                 <Wifi size={16} />
-                 <span className="text-xs font-bold uppercase tracking-widest">Production Mode: Cloud Database</span>
+              <div className="flex items-center gap-3 px-5 py-2.5 bg-green-50 border border-green-100 rounded-2xl shadow-sm text-green-700 animate-in fade-in slide-in-from-top-2">
+                 <Globe size={16} className="animate-pulse" />
+                 <span className="text-[10px] font-black uppercase tracking-widest">Production Environment: Live</span>
               </div>
            )}
+           
+           <div className="hidden md:flex items-center gap-4">
+              <div className="text-right">
+                <p className="text-xs font-black text-slate-900 tracking-tight leading-none">{user.businessName}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mt-1">Admin Account</p>
+              </div>
+              <div className="w-10 h-10 rounded-2xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-400 font-black text-sm">
+                {user.businessName[0]}
+              </div>
+           </div>
         </div>
 
         <div className="animate-in fade-in slide-in-from-bottom-2 duration-500">
