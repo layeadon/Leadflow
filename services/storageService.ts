@@ -1,4 +1,4 @@
-import { BusinessConfig, LeadMessage, UserProfile } from '@/types';
+import { BusinessConfig, LeadMessage, UserProfile } from '../types';
 
 const STORAGE_KEYS = {
   USER: 'leadflow_user',
